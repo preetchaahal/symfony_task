@@ -1,0 +1,53 @@
+{% extends 'layouts/backend.html.twig' %}
+
+{% block title %}
+Admin: Products
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Products<a href="#" class="pull-right btn btn-success">Add new</a></h1>	
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">Products</div>
+			<div class="panel-body">
+				<table class="table">
+				    <thead>
+				    <tr>
+				        <th>ID</th>
+				        <th>Name</th>
+				        <th>Status</th>
+				        <th>Action</th>
+				    </tr>
+				    </thead>
+				    <tbody>
+				    {% for prod in products %}
+				    	<tr>
+				    		<td>{{ prod.id }}</td>
+				    		<td>{{ prod.name }}</td>
+				    		<td>
+				    		{% if(prod.status == 1) %}
+				    			<a class="btn btn-warning" href="{{ path('deactProd', {'id': prod.id}) }}">De-Activate</a>
+				    		{% else %}
+				    			<a class="btn btn-info" href="{{ path('actProd', {'id': prod.id}) }}">Activate</a>
+				    		{% endif %}
+				    		</td>
+				    		<td>
+					    		<a href="{{ path('admin_product_edit', {'prodId': prod.id}) }}" class="btn btn-warning">Edit</a>
+					    		<a href="{{ path('deleteProd', {'id': prod.id}) }}" class="btn btn-danger">Delete</a
+				    		></td>
+				    	</tr>
+				    {% endfor %}
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div><!--/.row-->
+
+{% endblock %}

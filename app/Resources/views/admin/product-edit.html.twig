@@ -1,0 +1,123 @@
+{% extends 'layouts/backend.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/themes/default/style.min.css" />
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<ol class="breadcrumb">
+		<li class="active">Category</li>
+	</ol>
+</div><!--/.row-->
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{ title }}</h1>
+	</div>
+</div><!--/.row-->
+		
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{ product.name }}</div>
+			<div class="panel-body">
+				<div class="col-md-6">
+					<div class="row">
+						<form action="{{ url('admin_product_update') }}" method="POST">
+						
+							<div class="form-group">
+								<label>Change Name</label>
+								<input class="form-control" name="name" placeholder="Placeholder" value="{{ product.name }}">
+							</div>
+							<div class="form-group">
+								<select class="form-control">
+								{% for cat in categories %}
+									{% if(product.category == cat.id) %}
+										<option selected>{{ cat.name }}</option>
+									{% else %}
+										<option>{{ cat.name }}</option>
+									{% endif %}
+									}
+								{% endfor %}
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Price</label>
+								<input class="form-control" name="price" placeholder="Placeholder" value="{{ product.price }}">
+							</div>
+							<div class="form-group">
+								<label>Quantity</label>
+								<input class="form-control" name="qty" placeholder="Placeholder" value="{{ product.qty }}">
+							</div>
+							<div class="form-group">
+								<label>Description</label>
+								<textarea class="form-control" name="description"  value="{{ product.description }}"></textarea>
+							</div>
+								<input type="hidden" name="id" value="{{ product.id }}">
+							<button type="submit" class="btn btn-primary">Update</button>
+							<button type="reset" class="btn btn-default">Reset</button>
+						</form>
+					</div><!-- ///row -->
+				</div><!-- //col-md-6 -->			
+			</div><!-- //panel-body -->
+		</div>
+	</div><!-- /.col-->
+</div><!-- /.row -->
+{% endblock %}
+
+{% block extraScripts %}
+<!-- <script src="{{ asset('frontend/jstree/jstree.min.js') }}"></script> -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/jstree.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+    //fill data to tree  with AJAX call
+    $('#tree-container').jstree({
+        'core' : {
+			'data' : {
+				'url' : '{{ url("ajaxGetNode") }}',
+				"data" : function (node){
+    				return {"id" : node.id };
+    			},
+				"dataType" : "json"
+			}
+        ,'check_callback' : true,
+			'themes' : {
+				'responsive' : false
+			}
+		},
+		"types" : {
+			"default" : {
+				"icon" : "glyphicon glyphicon-list-alt"
+			},
+			"demo" : {
+				"icon" : "glyphicon glyphicon-plus"
+			}
+	    },
+		'plugins' : ['state','contextmenu','wholerow', 'types', 'dnd']
+	}).on('changed.jstree', function (e, data) {
+	    console.log(data.selected, "data changed in jstree");
+  	}).on('create_node.jstree', function (e, data) {
+		          
+		$.get('{{ url("ajaxCreateNode") }}', { 'id' : data.node.parent, 'position' : data.position, 'name' : data.node.text })
+		.done(function (d) {
+				data.instance.set_id(data.node, d.id);
+		})
+		.fail(function () {
+				data.instance.refresh();
+		});
+	}).on('rename_node.jstree', function (e, data) {
+		$.get('{{ url("ajaxRenameNode") }}', { 'id' : data.node.id, 'name' : data.text, 'parent' : data.node.parent })
+		.fail(function () {
+			data.instance.refresh();
+		});
+	}).on('delete_node.jstree', function (e, data) {
+		$.get('{{ url("ajaxDeleteNode") }}', { 'id' : data.node.id })
+		.fail(function () {
+			data.instance.refresh();
+		});
+	});
+});
+</script>
+{% endblock %}

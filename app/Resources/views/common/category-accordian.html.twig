@@ -1,0 +1,29 @@
+{% for menu in categories %}
+	{% if menu.subcat %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordian" href="#{{ menu.name }}">
+						<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+						{{ menu.name }}
+					</a>
+				</h4>
+			</div>
+			<div id="{{ menu.name }}" class="panel-collapse collapse">
+				<div class="panel-body">
+					<ul>
+						{% for value in menu.subcat %}
+							<li><a href="{{ path('products', {'catId': value.id}) }}">{{ value.name }}</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	{% else %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title"><a href="#">{{ menu.name }}</a></h4>
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}

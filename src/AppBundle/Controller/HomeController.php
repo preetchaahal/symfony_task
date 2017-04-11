@@ -2,27 +2,26 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\Category;
 
 class HomeController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      */
     public function defaultAction(Request $request)
     {
-        // fetching all available categories
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Category');
-        $categories = $repository->findAll();
-        
+        $entityManager = $this->getDoctrine()->getManager();
+        $categories = $entityManager->getRepository('AppBundle:Category')
+                                    ->findAllCategoriesAndSubCategories();
+
         return $this->render('default/index.html.twig', array(
             'categories'    =>    $categories     
         ));
-        // return $this->render('test/number.html.twig', array()
-        // );
     }
 }

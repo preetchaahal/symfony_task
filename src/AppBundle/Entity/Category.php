@@ -1,34 +1,44 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * Category
+ *
  * @ORM\Table(name="category")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  */
-
 class Category
 {
-	/**
-     * @ORM\Column(type="integer")
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var string
+     *
+     * @ORM\Column(name="parent_id", type="string", length=255)
      */
-    private $parent_id;
+    private $parentId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="status", type="smallint")
      */
     private $status;
 
@@ -36,7 +46,7 @@ class Category
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -76,7 +86,7 @@ class Category
      */
     public function setParentId($parentId)
     {
-        $this->parent_id = $parentId;
+        $this->parentId = $parentId;
 
         return $this;
     }
@@ -84,11 +94,11 @@ class Category
     /**
      * Get parentId
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
-        return $this->parent_id;
+        return $this->parentId;
     }
 
     /**
@@ -108,10 +118,11 @@ class Category
     /**
      * Get status
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
         return $this->status;
     }
 }
+

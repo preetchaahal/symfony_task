@@ -1,0 +1,53 @@
+{% extends 'layouts/backend.html.twig' %}
+
+{% block title %}
+Admin: Categories
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Categories</h1>
+	</div>
+</div><!--/.row-->
+		
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">Primary Categories</div>
+			<div class="panel-body">
+				<table class="table">
+				    <thead>
+				    <tr>
+				        <th>ID</th>
+				        <th>Name</th>
+				        <th>Status</th>
+				        <th>Action</th>
+				    </tr>
+				    </thead>
+				    <tbody>
+				    {% for cat in categories %}
+				    	<tr>
+				    		<td>{{ cat.id }}</td>
+				    		<td>{{ cat.name }}</td>
+				    		<td>
+				    		{% if(cat.status == 1) %}
+				    			<a class="btn btn-warning" href="{{ path('deactCat', {'id': cat.id}) }}">De-Activate</a>
+				    		{% else %}
+				    			<a class="btn btn-info" href="{{ path('actCat', {'id': cat.id}) }}">Activate</a>
+				    		{% endif %}
+				    		</td>
+				    		<td>
+					    		<a href="{{ path('deactCat', {'id': cat.id}) }}" class="btn btn-warning">Edit</a>
+					    		<a href="{{ path('deleteCat', {'id': cat.id}) }}" class="btn btn-danger">Delete</a
+				    		></td>
+				    	</tr>
+				    {% endfor %}
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div><!--/.row-->
+{% endblock %}
